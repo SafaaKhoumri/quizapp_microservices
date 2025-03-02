@@ -37,7 +37,7 @@ function TestList() {
   useEffect(() => {
     const fetchTests = async () => {
       try {
-        const response = await fetch('http://localhost:8088/api/tests');
+        const response = await fetch('http://localhost:8087/tests');
         if (!response.ok) {
           throw new Error(`HTTP error! status: ${response.status}`);
         }
@@ -64,7 +64,7 @@ function TestList() {
   const handleTestClick = async (test) => {
     setSelectedTest(test);
     try {
-      const response = await fetch(`http://localhost:8088/api/tests/${test.id}`);
+      const response = await fetch(`http://localhost:8087/tests/${test.id}`);
       const data = await response.json();
       console.log('Fetched test params:', data); // Log the fetched test params
       setTestParams(data);
@@ -73,7 +73,7 @@ function TestList() {
     }
 
     try {
-      const response = await fetch(`http://localhost:8088/api/tests/${test.id}/questions`);
+      const response = await fetch(`http://localhost:8087/tests/${test.id}/questions`);
       const data = await response.json();
       console.log('Fetched test questions:', data); // Log the fetched test questions
       setQuestions(data);
@@ -85,7 +85,7 @@ function TestList() {
   const handleParamsModalOpen = async () => {
     setIsParamsModalOpen(true);
     try {
-      const response = await fetch(`http://localhost:8088/api/tests/${selectedTest.id}`);
+      const response = await fetch(`http://localhost:8087/tests/${selectedTest.id}`);
       const data = await response.json();
       setTestParams(data);
     } catch (error) {
@@ -100,7 +100,7 @@ function TestList() {
   const handleCandidatesModalOpen = async () => {
     setIsCandidatesModalOpen(true);
     try {
-      const response = await fetch(`http://localhost:8088/api/tests/${selectedTest.id}/candidates`);
+      const response = await fetch(`http://localhost:8087/tests/${selectedTest.id}/candidates`);
       const data = await response.json();
       setCandidates(data);
     } catch (error) {
@@ -141,7 +141,7 @@ const handleSendTestToCandidate = async () => {
   };
 
   try {
-    const response = await axios.post(`http://localhost:8088/api/tests/${selectedTest.id}/sendToCandidate`, requestBody);
+    const response = await axios.post(`http://localhost:8087/tests/${selectedTest.id}/sendToCandidate`, requestBody);
     console.log('Response:', response.data);
     setIsInviteModalOpen(false);
     Swal.fire({

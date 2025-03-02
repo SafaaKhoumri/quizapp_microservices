@@ -13,7 +13,7 @@ function TestResultsPage() {
   const [searchBgColor, setSearchBgColor] = useState('#f4f4f4');
 
   useEffect(() => {
-    axios.get('http://localhost:8088/api/tests')
+    axios.get('http://localhost:8087/tests')
       .then(response => setTests(response.data))
       .catch(error => console.error('Error fetching tests:', error));
   }, []);
@@ -21,7 +21,7 @@ function TestResultsPage() {
   useEffect(() => {
     if (selectedTest) {
       setLoading(true);
-      axios.get(`http://localhost:8088/api/tests/${selectedTest}/results`)
+      axios.get(`http://localhost:8087/tests/${selectedTest}/results`)
         .then(response => {
           console.log(response.data); // Ajoutez cette ligne pour vérifier les données
           const candidatesData = response.data.map(candidate => ({

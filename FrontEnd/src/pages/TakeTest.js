@@ -33,7 +33,7 @@ const TakeTest = () => {
 
   useEffect(() => {
     // Fetch the questions for the test ID
-    fetch(`http://localhost:8088/api/tests/${id}/questions`)
+    fetch(`http://localhost:8087/tests/${id}/questions`)
       .then(response => response.json())
       .then(data => {
         console.log('Fetched questions:', data); // Debug line
@@ -89,7 +89,7 @@ const handleCloseDialog = (confirm) => {
         const email = new URLSearchParams(window.location.search).get('email');
         console.log("Email: ", email); // Log for debugging
 
-        fetch(`http://localhost:8088/api/tests/${id}/submit?email=${encodeURIComponent(email)}`, {
+        fetch(`http://localhost:8087/tests/${id}/submit?email=${encodeURIComponent(email)}`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
