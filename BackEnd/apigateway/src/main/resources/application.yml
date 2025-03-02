@@ -1,0 +1,79 @@
+server:
+  port: 8087
+
+spring:
+  main:
+    web-application-type: reactive
+  application:
+    name: api-gateway
+  cloud:
+    gateway:
+      globalcors:  # 🔥 Configuration CORS ajoutée ici
+        cors-configurations:
+          '[/**]':
+            allowedOrigins: "http://localhost:3000"
+            allowedMethods: "GET, POST, PUT, DELETE, OPTIONS"
+            allowedHeaders: "*"
+            allowCredentials: true
+      routes:
+        - id: CandidatService
+          uri: http://localhost:8071
+          predicates:
+            - Path=/candidat/**
+        - id: TestService
+          uri: http://localhost:8070
+          predicates:
+            - Path=/tests/**
+        - id: LevelService
+          uri: http://localhost:8083
+          predicates:
+            - Path=/level/**
+        - id: RoleService
+          uri: http://localhost:8082
+          predicates:
+            - Path=/role/**
+        - id: ThemeService
+          uri: http://localhost:8085
+          predicates:
+            - Path=/theme/**
+        - id: ScoreService
+          uri: http://localhost:8086
+          predicates:
+            - Path=/score/**
+        - id: Authentification
+          uri: http://localhost:8088
+          predicates:
+            - Path=/api/auth/**  # 🔥 Correction pour éviter que toutes les requêtes /api/** aillent sur Auth
+        - id: CompetenceService
+          uri: http://localhost:8089
+          predicates:
+            - Path=/competences/**
+        - id: QuestionService
+          uri: http://localhost:8090
+          predicates:
+            - Path=/question/**
+        - id: AnswerService
+          uri: http://localhost:8091
+          predicates:
+            - Path=/answer/**
+        - id: emailing
+          uri: http://localhost:8080
+          predicates:
+            - Path=/api/email/**
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"  # Restrict exposure for security
+  endpoint:
+    health:
+      show-details: always  # Show details in health check
+  metrics:
+    enabled: true  # Enable metrics for monitoring
+  health:
+    livenessstate:
+      enabled: true  # Liveness probe
+    readinessstate:
+      enabled: true  # Readiness probe
+  server:
+    port: 8099  # Actuator runs on a separate port
