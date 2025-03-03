@@ -41,11 +41,11 @@ public class ScoreController {
             return ResponseEntity.notFound().build();
         }
     }
-    @GetMapping("/{selectedTest}/results")
+ /*   @GetMapping("/{selectedTest}/results")
     public ResponseEntity<List<ScoreDTO>> getTestResults(@PathVariable Long selectedTest) {
         return ResponseEntity.ok(scoreService.getTestResults(selectedTest));
     }
-    
+    */
 
 
 

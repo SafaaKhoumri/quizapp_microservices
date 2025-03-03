@@ -1,9 +1,13 @@
 package com.example.QuestionService.service;
 
+
 import java.util.Optional;
 
+
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.slf4j.Logger;
 
 import com.example.QuestionService.dto.QuestionAnswerDTO;
 import com.example.QuestionService.dto.QuestionDTO;
@@ -14,6 +18,8 @@ import com.example.QuestionService.repository.QuestionRepository;
 public class QuestionService {
     @Autowired
     QuestionRepository questionRepository;
+    private static final Logger logger = LoggerFactory.getLogger(QuestionService.class);
+
 
     public QuestionDTO entityToDTO(Question question) {
         if (question == null) {
@@ -46,5 +52,8 @@ public class QuestionService {
             throw new RuntimeException("Question not found with id: " + id);
         }
     }
+
+
+    
 
 }
