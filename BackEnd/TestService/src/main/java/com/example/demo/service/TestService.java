@@ -38,7 +38,7 @@ public class TestService {
         @Autowired
         private EmailingClient emailingClient;
 
-        public TestDTO createTest(TestDTO testDTO) {
+        public String createTest(TestDTO testDTO) {
                 Test test = new Test();
                 test.setName(testDTO.getName());
                 test.setRoleId(testDTO.getRole().getId());
@@ -50,9 +50,8 @@ public class TestService {
                 test.setCandidateIds(candidateIds);
 
                 List<Long> competenceIds = testDTO.getCompetences().stream()
-                                .map(c -> competenceClient.addCompetence(c).getId())
-                                .collect(Collectors.toList());
-                test.setCompetenceIds(competenceIds);
+                .map(CompetenceDTO::getId)
+                .collect(Collectors.toList());
 
                 // Ajouter seulement des IDs de questions existantes
                 List<Long> questionIds = testDTO.getQuestions().stream()
@@ -65,17 +64,7 @@ public class TestService {
                 for (CandidatDTO candidat : testDTO.getCandidats()) {
                         emailingClient.sendTestLink(candidat);
                 }
-
-                return new TestDTO(
-                                savedTest.getId(),
-                                savedTest.getName(),
-                                candidateIds.stream().map(candidatClient::getCandidateById)
-                                                .collect(Collectors.toList()),
-                                roleClient.getRoleById(savedTest.getRoleId()),
-                                levelClient.getLevelById(savedTest.getLevelId()),
-                                competenceIds.stream().map(competenceClient::getCompetenceById)
-                                                .collect(Collectors.toList()),
-                                questionIds.stream().map(questionClient::getQuestionById).collect(Collectors.toList()));
+                return "Test créee avec success";
         }
 
         public List<TestDTO> getAllTests() {
