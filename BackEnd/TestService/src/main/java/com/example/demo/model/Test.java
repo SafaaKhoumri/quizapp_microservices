@@ -22,6 +22,9 @@ public class Test {
 
     private Long roleId;
     private Long levelId;
+    private Long adminId;
+
+    
 
     // Getters et Setters
     public Long getId() {
@@ -72,10 +75,10 @@ public class Test {
         this.levelId = levelId;
     }
     
-   
 
+  
     public Test(Long id, String name, List<Long> candidateIds, List<Long> competenceIds, List<Long> questionIds,
-            Long roleId, Long levelId) {
+            Long roleId, Long levelId, Long adminId) {
         this.id = id;
         this.name = name;
         this.candidateIds = candidateIds;
@@ -83,6 +86,7 @@ public class Test {
         this.questionIds = questionIds;
         this.roleId = roleId;
         this.levelId = levelId;
+        this.adminId = adminId;
     }
 
     public Test() {
@@ -94,6 +98,14 @@ public class Test {
 
     public void setQuestionIds(List<Long> questionIds) {
         this.questionIds = questionIds;
+    }
+
+    public Long getAdminId() {
+        return adminId;
+    }
+
+    public void setAdminId(Long adminId) {
+        this.adminId = adminId;
     }
     
 }
