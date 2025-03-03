@@ -35,8 +35,6 @@ public class QuestionController {
         return questionService.getQuestionWithAnswers(id);
     }
 
-<<<<<<< HEAD
-=======
     @GetMapping("/questions")
     public List<QuestionDTO> getQuestionsByCompetencyIds(@RequestParam List<Long> competencyIds) {
         System.out.println("📌 Compétences reçues : " + competencyIds);
@@ -44,5 +42,4 @@ public class QuestionController {
         return questionService.findQuestionsByCompetencyIds(competencyIds);
     }
 
->>>>>>> 8109f312478b9a44a342ef4431f4097938d18198
 }
