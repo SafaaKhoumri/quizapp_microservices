@@ -64,7 +64,7 @@ function TestList() {
   const handleTestClick = async (test) => {
     setSelectedTest(test);
     try {
-      const response = await fetch(`http://localhost:8087/tests/${test.id}`);
+      const response = await fetch(`http://localhost:8087/question/questAnswer${test.id}`);
       const data = await response.json();
       console.log('Fetched test params:', data); // Log the fetched test params
       setTestParams(data);
