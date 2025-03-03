@@ -12,12 +12,9 @@ import com.example.QuestionService.model.Question;
 import java.util.List;
 
 @Repository
-public interface QuestionRepository extends CrudRepository<Question, Long>{
-
-
 public interface QuestionRepository extends CrudRepository<Question, Long> {
     @Query("SELECT q FROM Question q WHERE q.competencyId IN :competencyIds")
     List<Question> findQuestionsByCompetencyIds(@Param("competencyIds") List<Long> competencyIds);
 
 }
-}
+

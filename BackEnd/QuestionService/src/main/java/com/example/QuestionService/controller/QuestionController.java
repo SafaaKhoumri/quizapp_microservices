@@ -1,12 +1,6 @@
 package com.example.QuestionService.controller;
 
-<<<<<<< HEAD
-
-=======
-import java.util.Arrays;
 import java.util.List;
-import java.util.stream.Collectors;
->>>>>>> 8109f312478b9a44a342ef4431f4097938d18198
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;

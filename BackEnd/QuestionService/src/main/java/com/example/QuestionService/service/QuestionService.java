@@ -1,11 +1,6 @@
 package com.example.QuestionService.service;
 
-<<<<<<< HEAD
-
-=======
 import java.util.List;
->>>>>>> 8109f312478b9a44a342ef4431f4097938d18198
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 
@@ -75,11 +70,4 @@ public class QuestionService {
                 competency // Ajoute la compétence au DTO
         );
     }
-<<<<<<< HEAD
-
-
-    
-
-=======
->>>>>>> 8109f312478b9a44a342ef4431f4097938d18198
 }
