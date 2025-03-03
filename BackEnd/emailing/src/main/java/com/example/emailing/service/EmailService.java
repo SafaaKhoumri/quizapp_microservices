@@ -5,7 +5,8 @@ import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 
-import com.example.emailing.dto.EmailRequestDTO;
+import com.example.emailing.dto.candidatDTO;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -27,11 +28,11 @@ public class EmailService {
         logger.info("Email envoyé à : {}", to);
     }
 
-    public void sendEmailWithTestLink(EmailRequestDTO requestDTO) {
-        String testLink = "http://localhost:3000/TakeTest/" + requestDTO.getTestId() + "?email="
-                + requestDTO.getCandidateEmail();
-        String body = "Bonjour " + requestDTO.getCandidateName() + ",\n\n" +
+    public void sendEmailWithTestLink(candidatDTO requestDTO) {
+        String testLink = "http://localhost:3000/TakeTest/" + requestDTO.getId() + "?email="
+                + requestDTO.getEmail();
+        String body = "Bonjour " + requestDTO.getName() + ",\n\n" +
                 "Vous êtes invité à passer le test. Cliquez ici : " + testLink + "\n\nBonne chance !";
-        sendEmail(requestDTO.getCandidateEmail(), "Invitation au test", body);
+        sendEmail(requestDTO.getEmail(), "Invitation au test", body);
     }
 }

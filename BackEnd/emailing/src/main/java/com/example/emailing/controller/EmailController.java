@@ -6,7 +6,7 @@ import org.springframework.http.ResponseEntity;
 
 import org.springframework.web.bind.annotation.*;
 
-import com.example.emailing.dto.EmailRequestDTO;
+import com.example.emailing.dto.candidatDTO;
 import com.example.emailing.service.EmailService;
 
 @RestController
@@ -17,7 +17,7 @@ public class EmailController {
     private EmailService emailService;
 
     @PostMapping("/sendTestLink")
-    public ResponseEntity<String> sendTestLink(@RequestBody EmailRequestDTO requestDTO) {
+    public ResponseEntity<String> sendTestLink(@RequestBody candidatDTO requestDTO) {
         try {
             emailService.sendEmailWithTestLink(requestDTO);
             return ResponseEntity.ok("Email envoyé avec succès");
