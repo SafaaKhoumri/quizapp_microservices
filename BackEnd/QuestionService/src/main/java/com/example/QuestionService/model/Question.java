@@ -1,15 +1,7 @@
 package com.example.QuestionService.model;
 
+import jakarta.persistence.*;
 import java.util.List;
-
-import com.fasterxml.jackson.annotation.JsonManagedReference;
-
-import jakarta.persistence.CascadeType;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.OneToMany;
 
 @Entity
 public class Question {
@@ -18,18 +10,14 @@ public class Question {
     private Long id;
 
     private String questionText;
-    @OneToMany(mappedBy = "question", cascade = CascadeType.ALL, orphanRemoval = true)
-    @JsonManagedReference
-    private List<AnswerChoice> answerChoices; 
 
-    public Question() {
-    }
+    private Long competencyId; // Stocke uniquement l'ID du microservice Competency
+    private Long testId; // Ajout de testId pour lier une question à un test
 
-    public Question(Long id, String questionText) {
-        this.id = id;
-        this.questionText = questionText;
-    }
+    @OneToMany(mappedBy = "question", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<AnswerChoice> answerChoices; // Stocke les réponses en local
 
+    // Getters et Setters
     public Long getId() {
         return id;
     }
@@ -46,6 +34,22 @@ public class Question {
         this.questionText = questionText;
     }
 
+    public Long getCompetencyId() {
+        return competencyId;
+    }
+
+    public void setCompetencyId(Long competencyId) {
+        this.competencyId = competencyId;
+    }
+
+    public Long getTestId() {
+        return testId;
+    }
+
+    public void setTestId(Long testId) {
+        this.testId = testId;
+    }
+
     public List<AnswerChoice> getAnswerChoices() {
         return answerChoices;
     }
@@ -53,9 +57,4 @@ public class Question {
     public void setAnswerChoices(List<AnswerChoice> answerChoices) {
         this.answerChoices = answerChoices;
     }
-
-    
-
-    
-
 }

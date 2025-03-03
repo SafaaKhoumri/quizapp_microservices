@@ -125,29 +125,30 @@ function Test3() {
     }
 };
 
-
-  const handleVisualizeTest = async () => {
-    try {
-      if (selectedCompetencies.length === 0) {
-        throw new Error('No competencies selected');
+const handleVisualizeTest = async () => {
+  try {
+      if (!selectedCompetencies || selectedCompetencies.length === 0) {
+          throw new Error('Aucune compétence sélectionnée.');
       }
 
-      const competencyIds = selectedCompetencies.map(comp => comp.id);
-      const response = await axios.get('http://localhost:8087/question/{id}/withAnswers', {
-        params: { competencyIds: competencyIds.join(',') }
-      });
+      const competencyIds = selectedCompetencies.map(comp => comp.id).join(',');
 
-      if (Array.isArray(response.data)) {
-        setQuestions(response.data);
-      } else {
-        console.error('Data format error: Expected an array');
-      }
+      console.log("📌 Envoi requête API :", `http://localhost:8087/question/questions?competencyIds=${competencyIds}`);
+
+      const response = await axios.get(`http://localhost:8087/question/questions?competencyIds=${competencyIds}`);
+
+      console.log("📌 Réponse reçue :", response.data);
+      setQuestions(response.data);
 
       setIsModalOpen(true);
-    } catch (error) {
-      console.error('Error fetching questions:', error);
-    }
-  };
+  } catch (error) {
+      console.error("❌ Erreur lors de la récupération des questions:", error);
+      setQuestions([]); 
+  }
+};
+
+
+
 
   const handleCloseModal = () => {
     setIsModalOpen(false);
@@ -251,24 +252,26 @@ function Test3() {
             Visualiser le test
           </Typography>
           {questions.length > 0 ? (
-            questions.map((q, index) => (
-              <Box key={index} sx={{
-                mb: 2,
-                p: 2,
-                border: '1px solid #ccc',
-                borderRadius: 2
-              }}>
-                <Typography variant="h6" style={{ marginBottom: 10, color: '#000' }}>{q.questionText}</Typography>
-                {q.choices.map((choice, idx) => (
-                  <Typography key={idx} variant="body1" style={{ color: '#555' }}>
-                    {choice.choiceText}
-                  </Typography>
-                ))}
-              </Box>
-            ))
-          ) : (
-            <Typography style={{ color: '#000' }}>No questions available</Typography>
-          )}
+  questions.map((q, index) => (
+    <Box key={index} sx={{ mb: 2, p: 2, border: '1px solid #ccc', borderRadius: 2 }}>
+      <Typography variant="h6" style={{ marginBottom: 10, color: '#000' }}>
+        {q.questionText}
+      </Typography>
+      {q.choices && q.choices.length > 0 ? (
+        q.choices.map((choice, idx) => (
+          <Typography key={idx} variant="body1" style={{ color: '#555' }}>
+            {choice.choiceText}
+          </Typography>
+        ))
+      ) : (
+        <Typography variant="body2" style={{ color: 'red' }}>Aucune réponse disponible</Typography>
+      )}
+    </Box>
+  ))
+) : (
+  <Typography style={{ color: '#000' }}>No questions available</Typography>
+)}
+
           <Button variant="contained" color="primary" onClick={handleCloseModal} style={{ borderRadius: 30, backgroundColor: '#232A56', color: '#fff', cursor: 'pointer', marginTop: 10 }}>Fermer</Button>
         </Box>
       </Modal>
