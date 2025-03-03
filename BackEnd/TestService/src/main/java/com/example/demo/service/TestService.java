@@ -4,6 +4,7 @@ import com.example.demo.repositories.TestRepository;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -122,5 +123,23 @@ public class TestService {
                                 })
                                 .orElse(null);
         }
+
+      public List<QuestionDTO> getTestQuestions(Long testId) {
+        Optional<Test> test = testRepository.findById(testId);
+        return test.map(value -> value.getQuestionIds().stream()
+                .map(questionClient::getQuestionById)
+                .collect(Collectors.toList())).orElse(null);
+        }
+
+        
+        public List<CandidatDTO> getTestCandidates(Long testId) {
+                Optional<Test> test = testRepository.findById(testId);
+                return test.map(value -> value.getCandidateIds().stream()
+                        .map(candidatClient::getCandidateById)
+                        .collect(Collectors.toList())).orElse(null);
+        }
+
+        
+      
 
 }

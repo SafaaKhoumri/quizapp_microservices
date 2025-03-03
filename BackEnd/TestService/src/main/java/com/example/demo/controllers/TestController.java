@@ -6,6 +6,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import com.example.demo.service.*;
+import com.example.demo.dto.CandidatDTO;
+import com.example.demo.dto.QuestionDTO;
 import com.example.demo.dto.TestDTO;
 
 @RestController
@@ -29,4 +31,16 @@ public class TestController {
     public ResponseEntity<TestDTO> getTestById(@PathVariable Long id) {
         return ResponseEntity.ok(testService.getTestById(id));
     }
+
+    @GetMapping("/{id}/questions")
+    public ResponseEntity<List<QuestionDTO>> getTestQuestions(@PathVariable Long id) {
+        return ResponseEntity.ok(testService.getTestQuestions(id));
+    }
+
+     @GetMapping("/{id}/candidates")
+    public ResponseEntity<List<CandidatDTO>> getTestCandidates(@PathVariable Long id) {
+        return ResponseEntity.ok(testService.getTestCandidates(id));
+    }
+
+   
 }
