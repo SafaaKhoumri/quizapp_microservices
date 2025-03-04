@@ -20,4 +20,3 @@ public interface QuestionRepository extends CrudRepository<Question, Long> {
     List<Question> findQuestionsByTestId(@Param("testId") Long testId);
 
 }
-

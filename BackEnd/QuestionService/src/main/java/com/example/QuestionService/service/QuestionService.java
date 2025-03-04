@@ -3,7 +3,6 @@ package com.example.QuestionService.service;
 import java.util.List;
 import java.util.stream.Collectors;
 
-
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -22,7 +21,6 @@ public class QuestionService {
     QuestionRepository questionRepository;
     private static final Logger logger = LoggerFactory.getLogger(QuestionService.class);
 
-
     @Autowired
     CompetencyClient competencyClient; // Feign Client pour récupérer la compétence
 
@@ -40,14 +38,21 @@ public class QuestionService {
 
     public List<QuestionAnswerDTO> getQuestionsAndAnswersByTestId(Long testId) {
         List<Question> questions = questionRepository.findQuestionsByTestId(testId);
-    
+
         return questions.stream()
-            .map(question -> new QuestionAnswerDTO(
-                question.getId(),
-                question.getQuestionText(),
-                question.getAnswerChoices()))
-            .collect(Collectors.toList());
-    }
+                .map(question -> {
+                    // 🔥 Récupérer la compétence depuis CompetencyService via Feign Client
+                    CompetencyDTO competency = competencyClient.getCompetencyById(question.getCompetencyId());
+
+                    return new QuestionAnswerDTO(
+                            question.getId(),
+                            question.getQuestionText(),
+                            question.getAnswerChoices(),
+                            competency // ✅ Passer un CompetencyDTO et non un Long
+                    );
+                })
+                .collect(Collectors.toList());
+    }
 
     public List<QuestionDTO> findQuestionsByCompetencyIds(List<Long> competencyIds) {
         List<Question> questions = questionRepository.findQuestionsByCompetencyIds(competencyIds);
@@ -81,4 +86,5 @@ public class QuestionService {
                 competency // Ajoute la compétence au DTO
         );
     }
+
 }
