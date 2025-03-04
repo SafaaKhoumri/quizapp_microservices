@@ -103,8 +103,8 @@ function TestResultsPage() {
                 onBlur={() => setSearchBgColor('#f4f4f4')} 
               />
               <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2, marginTop: '3%', alignItems: 'center' }}>
-  {candidates.length > 0 ? (
-    candidates.map(({ candidatId, candidatName, scorePercentage }) => (
+  {filteredCandidates.length > 0 ? (
+    filteredCandidates.map(({ candidatId, candidatName, scorePercentage }) => (
       <Box 
         key={candidatId} 
         sx={{ 
