@@ -37,10 +37,9 @@ public class TestController {
         return ResponseEntity.ok(testService.getTestQuestions(id));
     }
 
-     @GetMapping("/{id}/candidates")
+    @GetMapping("/{id}/candidates")
     public ResponseEntity<List<CandidatDTO>> getTestCandidates(@PathVariable Long id) {
         return ResponseEntity.ok(testService.getTestCandidates(id));
     }
 
-   
 }
