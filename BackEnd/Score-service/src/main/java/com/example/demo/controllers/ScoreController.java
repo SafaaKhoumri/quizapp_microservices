@@ -8,7 +8,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import com.example.demo.dto.ScoreDTO;
-import com.example.demo.dto.TestDTO;
 import com.example.demo.model.Score;
 import com.example.demo.service.ScoreService;
 
@@ -41,11 +40,12 @@ public class ScoreController {
             return ResponseEntity.notFound().build();
         }
     }
- /*   @GetMapping("/{selectedTest}/results")
-    public ResponseEntity<List<ScoreDTO>> getTestResults(@PathVariable Long selectedTest) {
-        return ResponseEntity.ok(scoreService.getTestResults(selectedTest));
+    @GetMapping("/test/{selectedTest}/results")
+    public ResponseEntity<List<ScoreDTO>> getScoresWithCandidatsByTest(@PathVariable Long selectedTest) {
+        List<ScoreDTO> scores = scoreService.getScoresWithCandidatsByTest(selectedTest);
+        return ResponseEntity.ok(scores);
     }
-    */
+    
 
 
 

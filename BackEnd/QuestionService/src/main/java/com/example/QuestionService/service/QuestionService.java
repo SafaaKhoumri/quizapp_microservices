@@ -3,10 +3,13 @@ package com.example.QuestionService.service;
 import java.util.List;
 import java.util.stream.Collectors;
 
+<<<<<<< HEAD
 import org.slf4j.LoggerFactory;
+=======
+
+>>>>>>> 37a80494b9e916d8569159b322524a2d03467c5c
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.slf4j.Logger;
 
 import com.example.QuestionService.client.CompetencyClient;
 import com.example.QuestionService.dto.CompetencyDTO;
@@ -19,7 +22,6 @@ import com.example.QuestionService.repository.QuestionRepository;
 public class QuestionService {
     @Autowired
     QuestionRepository questionRepository;
-    private static final Logger logger = LoggerFactory.getLogger(QuestionService.class);
 
     @Autowired
     CompetencyClient competencyClient; // Feign Client pour récupérer la compétence
