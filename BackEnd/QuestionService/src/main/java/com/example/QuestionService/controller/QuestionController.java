@@ -36,4 +36,9 @@ public class QuestionController {
         return questionService.findQuestionsByCompetencyIds(competencyIds);
     }
 
+    @GetMapping("/questAnswer/{testId}")
+    public List<QuestionAnswerDTO> getQuestionsAndAnswersByTestId(@PathVariable Long testId) {
+        return questionService.getQuestionsAndAnswersByTestId(testId);
+    }
+
 }

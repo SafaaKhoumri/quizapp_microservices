@@ -16,6 +16,5 @@ public interface CandidatClient {
 
     @PostMapping("/candidat")
     CandidatDTO addCandidate(@RequestBody CandidatDTO CandidatDTO);
-    
-    
+
 }

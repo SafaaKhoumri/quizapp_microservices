@@ -35,6 +35,17 @@ public class QuestionService {
         return dto;
     }
 
+    public List<QuestionAnswerDTO> getQuestionsAndAnswersByTestId(Long testId) {
+        List<Question> questions = questionRepository.findQuestionsByTestId(testId);
+    
+        return questions.stream()
+            .map(question -> new QuestionAnswerDTO(
+                question.getId(),
+                question.getQuestionText(),
+                question.getAnswerChoices()))
+            .collect(Collectors.toList());
+    }
+
     public List<QuestionDTO> findQuestionsByCompetencyIds(List<Long> competencyIds) {
         List<Question> questions = questionRepository.findQuestionsByCompetencyIds(competencyIds);
 
