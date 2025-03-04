@@ -257,8 +257,8 @@ const handleVisualizeTest = async () => {
       <Typography variant="h6" style={{ marginBottom: 10, color: '#000' }}>
         {q.questionText}
       </Typography>
-      {q.choices && q.choices.length > 0 ? (
-        q.choices.map((choice, idx) => (
+      {q.answerChoices && q.answerChoices.length > 0 ? (
+        q.answerChoices.map((choice, idx) => (
           <Typography key={idx} variant="body1" style={{ color: '#555' }}>
             {choice.choiceText}
           </Typography>

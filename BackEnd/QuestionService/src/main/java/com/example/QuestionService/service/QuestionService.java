@@ -29,6 +29,7 @@ public class QuestionService {
         QuestionDTO dto = new QuestionDTO();
         dto.setId(question.getId());
         dto.setQuestionText(question.getQuestionText());
+        dto.setAnswerChoices(question.getAnswerChoices());
 
         return dto;
     }
