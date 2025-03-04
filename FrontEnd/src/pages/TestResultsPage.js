@@ -21,7 +21,7 @@ function TestResultsPage() {
   useEffect(() => {
     if (selectedTest) {
       setLoading(true);
-      axios.get(`http://localhost:8087/tests/${selectedTest}/results`)
+      axios.get(`http://localhost:8087/score/test/${selectedTest}/results`)
         .then(response => {
           console.log(response.data); // Ajoutez cette ligne pour vérifier les données
           const candidatesData = response.data.map(candidate => ({
@@ -49,7 +49,7 @@ function TestResultsPage() {
   };
 
   const filteredCandidates = candidates.filter(candidate => 
-    candidate.candidate.name.toLowerCase().includes(searchTerm.toLowerCase()) &&
+    candidate.candidatName.toLowerCase().includes(searchTerm.toLowerCase()) &&
     (candidate.scorePercentage !== null || candidate.scorePercentage !== undefined)
   );
   
@@ -104,9 +104,9 @@ function TestResultsPage() {
               />
               <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2, marginTop: '3%', alignItems: 'center' }}>
   {candidates.length > 0 ? (
-    candidates.map(({ candidate, scorePercentage }) => (
+    candidates.map(({ candidatId, candidatName, scorePercentage }) => (
       <Box 
-        key={candidate.id} 
+        key={candidatId} 
         sx={{ 
           width: '95%', 
           backgroundColor: '#fff', 
@@ -119,8 +119,7 @@ function TestResultsPage() {
         }}
       >
         <Box sx={{ display: 'flex', flexDirection: 'column' }}>
-          <Typography variant="h6">{candidate.name}</Typography>
-          <Typography variant="body2" color="textSecondary">{candidate.email}</Typography>
+          <Typography variant="h6">{candidatName}</Typography>
         </Box>
         <Box 
           sx={{ 
@@ -138,7 +137,7 @@ function TestResultsPage() {
           </Typography>
         </Box>
       </Box>
-    ))
+    ))    
   ) : (
     <Typography variant="body1" color="textSecondary">Aucun candidat n'a été trouvé pour ce test.</Typography>
   )}

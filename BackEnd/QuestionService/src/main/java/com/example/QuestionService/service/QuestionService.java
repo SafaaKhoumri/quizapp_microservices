@@ -4,10 +4,8 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.slf4j.Logger;
 
 import com.example.QuestionService.client.CompetencyClient;
 import com.example.QuestionService.dto.CompetencyDTO;
@@ -20,7 +18,6 @@ import com.example.QuestionService.repository.QuestionRepository;
 public class QuestionService {
     @Autowired
     QuestionRepository questionRepository;
-    private static final Logger logger = LoggerFactory.getLogger(QuestionService.class);
 
 
     @Autowired
