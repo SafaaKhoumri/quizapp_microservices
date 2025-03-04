@@ -3,11 +3,6 @@ package com.example.QuestionService.service;
 import java.util.List;
 import java.util.stream.Collectors;
 
-<<<<<<< HEAD
-import org.slf4j.LoggerFactory;
-=======
-
->>>>>>> 37a80494b9e916d8569159b322524a2d03467c5c
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
