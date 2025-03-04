@@ -79,6 +79,99 @@ function TestList() {
       console.error("❌ Erreur récupération questions :", error);
     }
   };
+  const handleParamsModalOpen = async () => {
+    setIsParamsModalOpen(true);
+    try {
+      const response = await fetch(`http://localhost:8087/tests/${selectedTest.id}`);
+      const data = await response.json();
+      setTestParams(data);
+    } catch (error) {
+      console.error('Error fetching test params:', error);
+    }
+  };
+
+  const handleParamsModalClose = () => {
+    setIsParamsModalOpen(false);
+  };
+
+  const handleCandidatesModalOpen = async () => {
+    setIsCandidatesModalOpen(true);
+    try {
+      const response = await fetch(`http://localhost:8087/tests/${selectedTest.id}/candidates`);
+      const data = await response.json();
+      setCandidates(data);
+    } catch (error) {
+      console.error('Error fetching candidates:', error);
+    }
+  };
+
+  const handleCandidatesModalClose = () => {
+    setIsCandidatesModalOpen(false);
+  };
+
+  const handleInviteModalOpen = () => {
+    setIsInviteModalOpen(true);
+  };
+
+  const handleInviteModalClose = () => {
+    setIsInviteModalOpen(false);
+  };
+
+  // Pour capturer l'email saisi par l'utilisateur
+const handleEmailChange = (event) => {
+  setCandidateEmail(event.target.value);
+};
+const handleNameChange = (event) => {
+  setCandidateName(event.target.value);
+};
+
+// Pour envoyer le test au candidat
+const handleSendTestToCandidate = async () => {
+  if (!candidateEmail || !candidateName || !selectedTest) {
+    alert('Veuillez saisir un nom, un email, et sélectionner un test.');
+    return;
+  }
+
+  const requestBody = {
+    candidateEmail: candidateEmail,
+    candidateName: candidateName, 
+  };
+
+  try {
+    const response = await axios.post(`http://localhost:8088/tests/${selectedTest.id}/sendToCandidate`, requestBody);
+    console.log('Response:', response.data);
+    setIsInviteModalOpen(false);
+    Swal.fire({
+      title: 'Succès',
+      text: response.data.message || 'Test envoyé avec succès!',
+      icon: 'success',
+      confirmButtonText: 'OK',
+      customClass: {
+        confirmButton: 'custom-confirm-button' 
+    },
+    didOpen: () => {
+        const confirmButton = Swal.getConfirmButton();
+        confirmButton.style.backgroundColor = '#232A56'; 
+    }
+  });
+  } catch (error) {
+    console.error('Erreur lors de l\'envoi du test:', error);
+    setIsInviteModalOpen(false);
+    Swal.fire({
+      title: 'Erreur',
+      text: error.response?.data || 'Échec de l\'envoi du test' ,
+      icon: 'error',
+      confirmButtonText: 'OK',
+      customClass: {
+        confirmButton: 'custom-confirm-button' 
+    },
+    didOpen: () => {
+        const confirmButton = Swal.getConfirmButton();
+        confirmButton.style.backgroundColor = '#232A56'; 
+    }
+  });
+  }
+};
 
   return (
     <div style={{ display: "flex", minHeight: "100vh" }}>
@@ -119,12 +212,36 @@ function TestList() {
         <Box sx={{ width: "80%", padding: "20px", alignItems: "center", justifyContent: "center" }}>
           {selectedTest ? (
             <>
-              <Typography variant="h5" style={{ textAlign: "center", padding: "20px 0", fontSize: "2em" }}>
+              <Typography variant="h5" style={{ textAlign: 'center', padding: '20px 0' , fontSize: '2em'}}>
                 {selectedTest.name}
-              </Typography>
-              <div style={{ textAlign: "right", margin: "2%" }}>
-                <Button type="button" variant="contained" color="primary" sx={{ borderRadius: 30, width: "5%", backgroundColor: "#232A56", color: "#fff", cursor: "pointer", margin: "1%" }}>
+                </Typography>
+              <div style={{ textAlign: 'right', margin: '2%' }}>
+                <Button
+                  type="button"
+                  variant="contained"
+                  color="primary"
+                  style={{ borderRadius: 30, width: '5%', backgroundColor: '#232A56', color: '#fff', cursor: 'pointer', margin: '1%' }}
+                  onClick={handleParamsModalOpen}
+                >
                   <SettingsIcon />
+                </Button>
+                <Button
+                  type="button"
+                  variant="contained"
+                  color="primary"
+                  style={{ borderRadius: 30, width: '5%', backgroundColor: '#232A56', color: '#fff', cursor: 'pointer', margin: '1%' }}
+                  onClick={handleCandidatesModalOpen}
+                >
+                  <PersonIcon />
+                </Button>
+                <Button
+                  type="button"
+                  variant="contained"
+                  color="primary"
+                  style={{ borderRadius: 30, width: '5%', backgroundColor: '#232A56', color: '#fff', cursor: 'pointer', margin: '1%' }}
+                  onClick={handleInviteModalOpen}
+                >
+                  <AddIcon />
                 </Button>
               </div>
               <Typography variant="h6" style={{ fontSize: "27px", color: "rgba(35, 42, 86, 0.66)", textAlign: "center", paddingBottom: "3%" }}>
@@ -174,6 +291,141 @@ function TestList() {
           )}
         </Box>
       </div>
+      <Modal open={isParamsModalOpen} onClose={handleParamsModalClose}>
+    <Box sx={{
+      position: 'absolute',
+      top: '50%',
+      left: '50%',
+      transform: 'translate(-50%, -50%)',
+      width: 500,
+      bgcolor: 'background.paper',
+      boxShadow: 24,
+      p: 4,
+      borderRadius: 2,
+    }}>
+      <Typography variant="h6" style={{ fontSize: '1.5em', color: 'rgba(35, 42, 86, 0.66)', textAlign: 'center', paddingBottom: '5%' }}>Paramètres du test</Typography>
+      {testParams ? (
+        <Box sx={{ mt: 2 }}>
+          <Typography variant="body1"><strong>Nom du test:</strong> {testParams.name}</Typography>
+          <Typography variant="body1"><strong>Domaine:</strong> {testParams.theme ? testParams.theme.name : 'N/A'}</Typography>
+          <Typography variant="body1"><strong>Niveau:</strong> {testParams.level ? testParams.level.name : 'N/A'}</Typography>
+          <Typography variant="body1"><strong>Rôle:</strong> {testParams.role ? testParams.role.name : 'N/A'}</Typography>
+          <Typography variant="body1"><strong>Email de l'admin:</strong> {testParams.admin ? testParams.admin.email : 'N/A'}</Typography>
+        </Box>
+      ) : (
+        <Typography variant="body1">Aucun paramètre disponible.</Typography>
+      )}
+      
+    </Box>
+  </Modal>
+
+
+
+  <Modal open={isCandidatesModalOpen} onClose={handleCandidatesModalClose}>
+  <Box sx={{
+    position: 'absolute',
+    top: '50%',
+    left: '50%',
+    transform: 'translate(-50%, -50%)',
+    width: 500,
+    bgcolor: 'background.paper',
+    boxShadow: 24,
+    p: 4,
+    borderRadius: 2,
+    maxHeight: '70vh',
+    overflowY: 'auto',
+  }}>
+    <Typography variant="h6" style={{ fontSize: '1.5em', color: 'rgba(35, 42, 86, 0.66)', textAlign: 'center', paddingBottom: '5%' }}>
+      Candidats
+    </Typography>
+    <TextField
+      fullWidth
+      margin="normal"
+      label="Rechercher par nom"
+      variant="outlined"
+      InputProps={{
+        startAdornment: (
+          <InputAdornment position="start">
+            <SearchIcon />
+          </InputAdornment>
+        ),
+      }}
+      value={searchQuery}
+      onChange={handleSearchChange} // Fonction pour mettre à jour la recherche
+    />
+    {candidates.length > 0 ? (
+      <Box sx={{ mt: 2 }}>
+        <List>
+          {filteredCandidates.map(candidate => (
+            <Box 
+              key={candidate.id} 
+              sx={{
+                border: '1px solid #ccc',
+                borderRadius: 1,
+                padding: 2,
+                marginBottom: 2,
+              }}
+            >
+              <ListItem>
+                <ListItemText primary={candidate.name} secondary={candidate.email} />
+              </ListItem>
+            </Box>
+          ))}
+        </List>
+      </Box>
+    ) : (
+      <Typography variant="body1">Aucun candidat disponible.</Typography>
+    )}
+  </Box>
+</Modal>
+
+
+
+<Modal open={isInviteModalOpen} onClose={handleInviteModalClose}>
+  <Box sx={{
+    position: 'absolute',
+    top: '50%',
+    left: '50%',
+    transform: 'translate(-50%, -50%)',
+    width: 400,
+    bgcolor: 'background.paper',
+    boxShadow: 24,
+    p: 4,
+    borderRadius: 2,
+  }}>
+   <Typography variant="h6" style={{ fontSize: '1.5em', color: 'rgba(35, 42, 86, 0.66)', textAlign: 'center', paddingBottom: '5%' }}>
+   Inviter un candidat</Typography>
+    <TextField
+      fullWidth
+      type="email"
+      name="email"
+      margin="normal"
+      label="Email du candidat"
+      variant="outlined"
+      value={candidateEmail}
+      onChange={handleEmailChange} 
+    />
+    <TextField
+      fullWidth
+      type="text"
+      name="name"
+      margin="normal"
+      label="Nom du candidat"
+      variant="outlined"
+      value={candidateName}
+      onChange={handleNameChange} 
+    />
+    <Button
+      type="button"
+      variant="contained"
+      color="primary"
+      sx={{ marginTop: 2, borderRadius: 30, width: '100%', backgroundColor: '#232A56', color: '#fff', cursor: 'pointer', '&:hover': { backgroundColor: '#1A1E40', transform: 'scale(1.05)' } }}
+      onClick={handleSendTestToCandidate} // Appel à la méthode handleSendTestToCandidate pour envoyer le test
+    >
+      Envoyer le test
+    </Button>
+  </Box>
+</Modal>
     </div>
   );
 }

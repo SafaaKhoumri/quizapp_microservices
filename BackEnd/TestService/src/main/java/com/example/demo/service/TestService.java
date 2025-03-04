@@ -17,7 +17,7 @@ import com.example.demo.api.EmailingClient;
 import com.example.demo.api.LevelClient;
 import com.example.demo.api.QuestionClient;
 import com.example.demo.api.RoleClient;
-
+import com.example.demo.api.ThemeClient;
 import com.example.demo.dto.AdministrateurDTO;
 import com.example.demo.dto.CandidatDTO;
 import com.example.demo.dto.CompetenceDTO;
@@ -36,6 +36,8 @@ public class TestService {
     @Autowired
     private LevelClient levelClient;
     @Autowired
+    private ThemeClient themeClient;
+    @Autowired
     private CompetenceClient competenceClient;
     @Autowired
     private QuestionClient questionClient;
@@ -50,6 +52,7 @@ public class TestService {
         test.setRoleId(testDTO.getRole().getId());
         test.setLevelId(testDTO.getLevel().getId());
         test.setAdminId(testDTO.getAdmin().getId());
+        test.setThemeId(testDTO.getTheme().getId());
 
         List<Long> candidateIds = testDTO.getCandidats().stream()
                 .map(c -> candidatClient.addCandidate(c).getId())
@@ -98,6 +101,7 @@ public class TestService {
                     candidates,
                     roleClient.getRoleById(test.getRoleId()),
                     levelClient.getLevelById(test.getLevelId()),
+                    themeClient.getThemeById(test.getThemeId()),
                     admin,
                     competences,
                     questions);
@@ -126,6 +130,7 @@ public class TestService {
                     candidates,
                     roleClient.getRoleById(test.getRoleId()),
                     levelClient.getLevelById(test.getLevelId()),
+                    themeClient.getThemeById(test.getThemeId()),
                     admin,
                     competences,
                     questions);

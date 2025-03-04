@@ -9,6 +9,7 @@ public class TestDTO {
     private List<CandidatDTO> candidats;
     private RoleDTO role;
     private LevelDTO level;
+    private ThemeDTO theme;
     private AdministrateurDTO admin;
     private List<CompetenceDTO> competences;
     private List<QuestionDTO> questions;
@@ -17,17 +18,22 @@ public class TestDTO {
     }
     
 
-    public TestDTO(Long id, String name, List<CandidatDTO> candidats, RoleDTO role, LevelDTO level,
+
+    public TestDTO(Long id, String name, List<CandidatDTO> candidats, RoleDTO role, LevelDTO level, ThemeDTO theme,
             AdministrateurDTO admin, List<CompetenceDTO> competences, List<QuestionDTO> questions) {
         this.id = id;
         this.name = name;
         this.candidats = candidats;
         this.role = role;
         this.level = level;
+        this.theme = theme;
         this.admin = admin;
         this.competences = competences;
         this.questions = questions;
     }
+
+
+
 
 
     public Long getId() {
@@ -94,6 +100,22 @@ public class TestDTO {
 
     public void setAdmin(AdministrateurDTO admin) {
         this.admin = admin;
+    }
+
+
+
+
+
+    public ThemeDTO getTheme() {
+        return theme;
+    }
+
+
+
+
+
+    public void setTheme(ThemeDTO theme) {
+        this.theme = theme;
     }
 
     
