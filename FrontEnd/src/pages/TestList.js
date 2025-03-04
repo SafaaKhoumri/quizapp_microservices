@@ -128,50 +128,32 @@ const handleNameChange = (event) => {
 // Pour envoyer le test au candidat
 const handleSendTestToCandidate = async () => {
   if (!candidateEmail || !candidateName || !selectedTest) {
-    alert('Veuillez saisir un nom, un email, et sélectionner un test.');
+    Swal.fire("Erreur", "Veuillez saisir un nom, un email et sélectionner un test.", "error");
     return;
   }
 
   const requestBody = {
-    candidateEmail: candidateEmail,
-    candidateName: candidateName, 
+    name: candidateName.trim(),
+    email: candidateEmail.trim(),
+    testId: selectedTest?.id || null,  // ✅ Ensure it's not undefined
+    testName: selectedTest?.name || "Test inconnu",
   };
 
+  console.log("📤 Payload envoyé :", JSON.stringify(requestBody, null, 2));
+
   try {
-    const response = await axios.post(`http://localhost:8088/tests/${selectedTest.id}/sendToCandidate`, requestBody);
-    console.log('Response:', response.data);
+    const response = await axios.post("http://localhost:8087/api/email/sendTestLink", requestBody);
+    console.log("✅ Réponse du serveur :", response.data);
+
+    Swal.fire("Succès", "Le test a été envoyé avec succès!", "success");
     setIsInviteModalOpen(false);
-    Swal.fire({
-      title: 'Succès',
-      text: response.data.message || 'Test envoyé avec succès!',
-      icon: 'success',
-      confirmButtonText: 'OK',
-      customClass: {
-        confirmButton: 'custom-confirm-button' 
-    },
-    didOpen: () => {
-        const confirmButton = Swal.getConfirmButton();
-        confirmButton.style.backgroundColor = '#232A56'; 
-    }
-  });
   } catch (error) {
-    console.error('Erreur lors de l\'envoi du test:', error);
-    setIsInviteModalOpen(false);
-    Swal.fire({
-      title: 'Erreur',
-      text: error.response?.data || 'Échec de l\'envoi du test' ,
-      icon: 'error',
-      confirmButtonText: 'OK',
-      customClass: {
-        confirmButton: 'custom-confirm-button' 
-    },
-    didOpen: () => {
-        const confirmButton = Swal.getConfirmButton();
-        confirmButton.style.backgroundColor = '#232A56'; 
-    }
-  });
+    console.error("❌ Erreur lors de l'envoi de l'email :", error.response?.data || error.message);
+    Swal.fire("Erreur", error.response?.data || "Échec de l'envoi du test.", "error");
   }
 };
+
+
 
   return (
     <div style={{ display: "flex", minHeight: "100vh" }}>
