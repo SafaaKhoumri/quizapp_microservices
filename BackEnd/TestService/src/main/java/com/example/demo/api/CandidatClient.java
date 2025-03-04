@@ -17,4 +17,6 @@ public interface CandidatClient {
     @PostMapping("/candidat")
     CandidatDTO addCandidate(@RequestBody CandidatDTO CandidatDTO);
 
+    @GetMapping("/candidat/email/{email}")
+    CandidatDTO getCandidatByEmail(@PathVariable String email);
 }

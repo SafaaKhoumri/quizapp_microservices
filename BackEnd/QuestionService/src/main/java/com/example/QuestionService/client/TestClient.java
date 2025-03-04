@@ -10,4 +10,8 @@ public interface TestClient {
 
     @GetMapping("/tests/{id}")
     TestDTO getTestById(@PathVariable Long id);
+
+    @GetMapping("/tests/candidat/email/{email}/testId")
+    Long getTestIdByCandidatEmail(@PathVariable String email);
 }
+

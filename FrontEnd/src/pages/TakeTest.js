@@ -30,10 +30,11 @@ const TakeTest = () => {
   const [openDialog, setOpenDialog] = useState(false);
   const [submitted, setSubmitted] = useState(false);
   const [started, setStarted] = useState(false);
-
-  useEffect(() => {
+  const email = new URLSearchParams(window.location.search).get('email');
+  
+  /*useEffect(() => {
     // Fetch the questions for the test ID
-    fetch(`http://localhost:8087/tests/${id}/questions`)
+    fetch(`localhost:8087/question/byCandidat/email/${email}`)
       .then(response => response.json())
       .then(data => {
         console.log('Fetched questions:', data); // Debug line
@@ -42,7 +43,37 @@ const TakeTest = () => {
       })
       .catch(error => console.error('Error fetching questions:', error));
   }, [id]);
-
+  */
+  useEffect(() => {
+    if (!email) {
+      console.warn("Email is missing, cannot fetch questions");
+      return;
+    }
+  
+    console.log("Fetching questions from API...");
+    fetch(`http://localhost:8087/question/byCandidat/email/${email}`)
+      .then(response => {
+        if (!response.ok) {
+          throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+        return response.json();
+      })
+      .then(data => {
+        console.log("Fetched questions:", data);
+  
+        // Ensure choices are correctly mapped from answerChoices
+        const validatedQuestions = data.map(question => ({
+          ...question,
+          choices: question.answerChoices || [], // Map answerChoices to choices
+        }));
+  
+        setQuestions(validatedQuestions);
+        setAnswers(new Array(validatedQuestions.length).fill(''));
+      })
+      .catch(error => console.error("Error fetching questions:", error));
+  }, [id, email]);
+  
+  
   const handleChange = (event) => {
     const newAnswers = [...answers];
     newAnswers[currentQuestion] = event.target.value;
@@ -142,9 +173,9 @@ const handleCloseDialog = (confirm) => {
                 </Typography>
                 <FormControl component="fieldset">
                   <RadioGroup value={answers[currentQuestion]} onChange={handleChange}>
-                    {questions[currentQuestion]?.choices.map((choice, index) => (
+                    {questions[currentQuestion]?.answerChoices?.map((choice, index) => (
                       <FormControlLabel key={index} value={choice.choiceText} control={<Radio />} label={choice.choiceText} />
-                    ))}
+                    )) || <Typography>Aucune option disponible</Typography>}
                   </RadioGroup>
                 </FormControl>
                 <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', marginTop: '2rem' }}>

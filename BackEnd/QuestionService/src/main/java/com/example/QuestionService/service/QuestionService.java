@@ -6,7 +6,9 @@ import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.example.QuestionService.client.CandidatClient;
 import com.example.QuestionService.client.CompetencyClient;
+import com.example.QuestionService.client.TestClient;
 import com.example.QuestionService.dto.CompetencyDTO;
 import com.example.QuestionService.dto.QuestionAnswerDTO;
 import com.example.QuestionService.dto.QuestionDTO;
@@ -20,6 +22,16 @@ public class QuestionService {
 
     @Autowired
     CompetencyClient competencyClient; // Feign Client pour récupérer la compétence
+
+    @Autowired
+    TestClient testClient;
+    
+    public List<QuestionDTO> getQuestionsByCandidatEmail(String email) {
+        Long testId = testClient.getTestIdByCandidatEmail(email);
+        List<Question> questions = questionRepository.findQuestionsByTestId(testId);
+        return questions.stream().map(this::entityToDTO).collect(Collectors.toList());
+    }
+    
 
     public QuestionDTO entityToDTO(Question question) {
         if (question == null) {

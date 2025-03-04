@@ -78,4 +78,11 @@ public class CandidatImpl implements CandidatService{
                 .filter(candidate -> candidate != null)
                 .collect(Collectors.toList());
     }
+
+    @Override
+    public CandidatDTO getCandidatByEmail(String email) {
+        Candidat candidat = candidatRepo.findByEmail(email);
+        return entityToDTO(candidat);
+    }
+
 }

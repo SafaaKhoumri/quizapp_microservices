@@ -47,4 +47,10 @@ public class candidatController {
         return ResponseEntity.ok(candidatService.getCandidatesByTestId(testId));
     }
 
+    @GetMapping("/email/{email}")
+    public ResponseEntity<CandidatDTO> getCandidatByEmail(@PathVariable String email) {
+        return ResponseEntity.ok(candidatService.getCandidatByEmail(email));
+    }
+
+
 }

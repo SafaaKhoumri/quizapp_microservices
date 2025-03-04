@@ -11,4 +11,5 @@ public interface CandidatService {
     CandidatDTO addCandidat(CandidatDTO candidateDTO);
     CandidatDTO getCandidatById(Long id);
     List<CandidatDTO> getCandidatesByTestId(Long testId);
+    public CandidatDTO getCandidatByEmail(String email);
 }
