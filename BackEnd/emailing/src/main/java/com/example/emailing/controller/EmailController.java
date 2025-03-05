@@ -29,9 +29,6 @@ public class EmailController {
         if (requestDTO.getTestId() == null) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Erreur : L'ID du test est nul.");
         }
-        if (requestDTO.getTestName() == null || requestDTO.getTestName().isEmpty()) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Erreur : Le nom du test est vide ou nul.");
-        }
 
         try {
             emailService.sendEmailWithTestLink(requestDTO);

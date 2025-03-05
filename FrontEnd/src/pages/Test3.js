@@ -153,20 +153,20 @@ useEffect(() => {
             theme: themeData,
             role: roleData,
             level: levelData,
-            competences: competencyData,
+            competences: selectedCompetencies.map(comp => ({ id: comp.id, name: comp.name })),
             questions: formattedQuestions,
-            candidates
+            candidats: candidates.map(c => ({ name: c.name, email: c.email })),
         });
 
         const response = await axios.post('http://localhost:8087/tests/addTest', {
-          testName,
+          name: testName,
           admin: adminData,
           theme: themeData,
           role: roleData,
           level: levelData,
-          competences: competencyData,  // <-- ICI
+          competences: selectedCompetencies.map(comp => ({ id: comp.id, name: comp.name })),
           questions: formattedQuestions,
-          candidates,
+          candidats: candidates.map(c => ({ name: c.name, email: c.email })),
       });
       
 

@@ -5,14 +5,15 @@ public class CandidatDTO {
     private Long id;
     private String name;
     private String email;
+    private Long testId;
 
     public CandidatDTO() {
     }
-
-    public CandidatDTO(Long id, String name, String email) {
+        public CandidatDTO(Long id, String name, String email, Long testId) {
         this.id = id;
         this.name = name;
         this.email = email;
+        this.testId = testId;
     }
 
     public Long getId() {
@@ -39,4 +40,11 @@ public class CandidatDTO {
         this.email = email;
     }
 
+    public Long getTestId() {
+        return testId;
+    }
+    
+    public void setTestId(Long testId) {
+        this.testId = testId;
+    }
 }

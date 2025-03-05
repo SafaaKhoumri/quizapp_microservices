@@ -54,8 +54,19 @@ public class TestService {
         test.setAdminId(testDTO.getAdmin().getId());
         test.setThemeId(testDTO.getTheme().getId());
 
-        List<Long> candidateIds = testDTO.getCandidats().stream()
-                .map(c -> candidatClient.addCandidate(c).getId())
+        Test savedTest = testRepository.save(test);
+        System.out.println(savedTest.getId());
+
+        
+        List<CandidatDTO> savedCandidates = testDTO.getCandidats().stream()
+        .map(c -> candidatClient.addCandidate(c))
+        .collect(Collectors.toList());
+        /*for (CandidatDTO candidat : savedCandidates) {
+            emailingClient.sendTestLink(candidat);
+        }*/
+        
+        List<Long> candidateIds = savedCandidates.stream()
+                .map(CandidatDTO::getId)
                 .collect(Collectors.toList());
         test.setCandidateIds(candidateIds);
 
@@ -71,7 +82,8 @@ public class TestService {
 
         testRepository.save(test);
 
-        for (CandidatDTO candidat : testDTO.getCandidats()) {
+        for (CandidatDTO candidat : savedCandidates) {
+            candidat.setTestId(savedTest.getId());
             emailingClient.sendTestLink(candidat);
         }
         return "Test créé avec succès";
