@@ -27,8 +27,8 @@ public class QuestionService {
     
     public List<QuestionDTO> getQuestionsByCandidatEmail(String email) {
         Long testId = testClient.getTestIdByCandidatEmail(email);
-        List<Question> questions = questionRepository.findQuestionsByTestId(testId);
-        return questions.stream().map(this::entityToDTO).collect(Collectors.toList());
+        List<QuestionDTO> questions = testClient.getTestQuestions(testId);
+        return questions.stream().collect(Collectors.toList());
     }
     
 
@@ -45,23 +45,6 @@ public class QuestionService {
         return dto;
     }
 
-    public List<QuestionAnswerDTO> getQuestionsAndAnswersByTestId(Long testId) {
-        List<Question> questions = questionRepository.findQuestionsByTestId(testId);
-
-        return questions.stream()
-                .map(question -> {
-                    // 🔥 Récupérer la compétence depuis CompetencyService via Feign Client
-                    CompetencyDTO competency = competencyClient.getCompetencyById(question.getCompetencyId());
-
-                    return new QuestionAnswerDTO(
-                            question.getId(),
-                            question.getQuestionText(),
-                            question.getAnswerChoices(),
-                            competency // ✅ Passer un CompetencyDTO et non un Long
-                    );
-                })
-                .collect(Collectors.toList());
-    }
 
     public List<QuestionDTO> findQuestionsByCompetencyIds(List<Long> competencyIds) {
         List<Question> questions = questionRepository.findQuestionsByCompetencyIds(competencyIds);

@@ -1,9 +1,11 @@
 package com.example.QuestionService.client;
 
 import com.example.QuestionService.dto.TestDTO;
+import com.example.QuestionService.dto.*;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import java.util.List;
 
 @FeignClient(name = "Test-service", url = "http://localhost:8070") // Ajustez le port si nécessaire
 public interface TestClient {
@@ -13,5 +15,9 @@ public interface TestClient {
 
     @GetMapping("/tests/candidat/email/{email}/testId")
     Long getTestIdByCandidatEmail(@PathVariable String email);
+
+    @GetMapping("/tests/{id}/questions")
+    List<QuestionDTO> getTestQuestions(@PathVariable Long id);
+
 }
 

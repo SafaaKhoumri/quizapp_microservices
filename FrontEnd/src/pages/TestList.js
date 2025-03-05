@@ -71,7 +71,7 @@ function TestList() {
     }
 
     try {
-      const response = await fetch(`http://localhost:8087/question/questAnswer/${test.id}`);
+      const response = await fetch(`http://localhost:8087/tests/${test.id}/questions`);
       const data = await response.json();
       console.log("✅ Questions et réponses récupérées :", data);
       setQuestions(data);

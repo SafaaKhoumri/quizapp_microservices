@@ -12,7 +12,6 @@ public class Question {
     private String questionText;
 
     private Long competencyId; // Stocke uniquement l'ID du microservice Competency
-    private Long testId; // Ajout de testId pour lier une question à un test
 
     @OneToMany(mappedBy = "question", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<AnswerChoice> answerChoices; // Stocke les réponses en local
@@ -40,14 +39,6 @@ public class Question {
 
     public void setCompetencyId(Long competencyId) {
         this.competencyId = competencyId;
-    }
-
-    public Long getTestId() {
-        return testId;
-    }
-
-    public void setTestId(Long testId) {
-        this.testId = testId;
     }
 
     public List<AnswerChoice> getAnswerChoices() {
