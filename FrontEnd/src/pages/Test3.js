@@ -19,14 +19,61 @@ import { useLocation } from 'react-router-dom';
 
 function Test3() {
   const location = useLocation();
-  const { adminEmail, domain, role, level, selectedCompetencies } = location.state || {};
+  const { adminEmail, theme, role, level, selectedCompetencies } = location.state || {};
   const [candidates, setCandidates] = useState([{ name: '', email: '' }]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [questions, setQuestions] = useState([]);
+  const [selectedQuestions, setSelectedQuestions] = useState([]);
   const [testName, setTestName] = useState('');
   const [isSubmitDisabled, setIsSubmitDisabled] = useState(true);
   const [isLoading, setIsLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
+  const [roleData, setRoleData] = useState(null);
+  const [levelData, setLevelData] = useState(null);
+  const [themeData, setThemeData] = useState(null);
+  const [adminData, setAdminData] = useState(null);
+  const [competencyData, setCompetencyData] = useState([]);
+  const [isAdminLoaded, setIsAdminLoaded] = useState(false);
+
+  useEffect(() => {
+    if (adminEmail) {
+        axios.get(`http://localhost:8088/api/auth/email/${adminEmail}`)
+            .then(response => {
+                console.log("📌 Admin récupéré :", response.data);
+                setAdminData(response.data);
+                setIsAdminLoaded(true); // ✅ Marquer comme chargé
+            })
+            .catch(error => {
+                console.error("❌ Erreur récupération admin :", error.response?.data || error.message);
+                setIsAdminLoaded(false);
+            });
+    }
+}, [adminEmail]);
+
+
+
+  useEffect(() => {
+    if (role) {
+        axios.get(`http://localhost:8087/role/${role}`)
+            .then(response => setRoleData(response.data))
+            .catch(error => console.error("❌ Erreur récupération role:", error));
+    }
+    if (level) {
+        axios.get(`http://localhost:8087/level/${level}`)
+            .then(response => setLevelData(response.data))
+            .catch(error => console.error("❌ Erreur récupération level:", error));
+    }
+    if (theme) {
+        axios.get(`http://localhost:8087/theme/${theme}`)
+            .then(response => setThemeData(response.data))
+            .catch(error => console.error("❌ Erreur récupération theme:", error));
+    }
+}, [role, level, theme]);
+
+
+
+// Vérifier si les données sont prêtes avant l'envoi
+const isDataReady = roleData && levelData && themeData;
 
    // Vérifie si tous les champs requis sont remplis
    const checkIfFormIsComplete = () => {
@@ -42,9 +89,13 @@ function Test3() {
   };
 
 
-  useEffect(() => {
+ /* useEffect(() => {
     setIsSubmitDisabled(!checkIfFormIsComplete());
   }, [testName, candidates]);
+*/
+useEffect(() => {
+  setIsSubmitDisabled(!testName.trim() || candidates.some(c => !c.name.trim() || !c.email.trim()) || selectedQuestions.length === 0);
+}, [testName, candidates, selectedQuestions]);
 
   const handleCandidateChange = (index, e) => {
     const { name, value } = e.target;
@@ -80,50 +131,60 @@ function Test3() {
     setIsLoading(true);
     setErrorMessage('');
 
+    console.log("📌 Vérification `adminData` avant envoi :", adminData);
+
+    if (!adminData || !adminData.id || !adminData.email) {
+        alert("❌ L'admin n'a pas été chargé correctement.");
+        setIsLoading(false);
+        return;
+    }
+
     const competencyIds = selectedCompetencies.map(comp => comp.id);
+    
+    const formattedQuestions = questions.map(q => ({
+        id: q.id,
+        questionText: q.questionText
+    }));
+
     try {
-        console.log('Submitting test data', {
+        console.log("📌 Données envoyées :", {
             testName,
-            adminEmail,
-            domain,
-            role,
-            level,
-            competencyIds,
+            admin: adminData,
+            theme: themeData,
+            role: roleData,
+            level: levelData,
+            competences: competencyData,
+            questions: formattedQuestions,
             candidates
         });
 
-        const response = await axios.post('http://localhost:8088/api/createAndSendTest', {
-            testName,
-            adminEmail,
-            domaineId: domain,
-            roleId: role,
-            levelId: level,
-            competencyIds,
-            candidates
-        });
+        const response = await axios.post('http://localhost:8087/tests/addTest', {
+          testName,
+          admin: adminData,
+          theme: themeData,
+          role: roleData,
+          level: levelData,
+          competences: competencyData,  // <-- ICI
+          questions: formattedQuestions,
+          candidates,
+      });
+      
 
         Swal.fire({
             title: 'Succès',
             text: response.data.message || 'Test créé et envoyé avec succès!',
             icon: 'success',
-            confirmButtonText: 'OK',
-            customClass: {
-              confirmButton: 'custom-confirm-button' 
-          },
-          didOpen: () => {
-              const confirmButton = Swal.getConfirmButton();
-              confirmButton.style.backgroundColor = '#232A56'; 
-          }
+            confirmButtonText: 'OK'
         });
+
     } catch (error) {
-        console.error('Error sending emails and storing test:', error.response ? error.response.data : error.message);
-        alert('Échec de l\'envoi des emails et de l\'enregistrement du test.');
-  
-        setErrorMessage(error.response?.data || 'Failed to send emails and store test.');
+        console.error('❌ Erreur lors de la création du test:', error.response?.data || error.message);
+        setErrorMessage(error.response?.data?.message || "Échec de l'envoi des emails et de l'enregistrement du test.");
     } finally {
         setIsLoading(false);
     }
 };
+
 
 const handleVisualizeTest = async () => {
   try {
@@ -139,6 +200,7 @@ const handleVisualizeTest = async () => {
 
       console.log("📌 Réponse reçue :", response.data);
       setQuestions(response.data);
+      setSelectedQuestions(response.data);
 
       setIsModalOpen(true);
   } catch (error) {
@@ -146,7 +208,36 @@ const handleVisualizeTest = async () => {
       setQuestions([]); 
   }
 };
+useEffect(() => {
+  console.log("📌 selectedCompetencies reçu :", selectedCompetencies);
 
+  const fetchCompetencies = async () => {
+    try {
+      if (!selectedCompetencies || selectedCompetencies.length === 0) {
+        throw new Error("Aucune compétence sélectionnée.");
+      }
+
+      const competencyIds = selectedCompetencies.map(comp => comp.id).join(',');
+
+      console.log("📌 Envoi requête API :", `http://localhost:8087/competences?ids=${competencyIds}`);
+
+      const response = await axios.get(`http://localhost:8087/competences?ids=${competencyIds}`);
+
+      console.log("📌 Réponse reçue :", response.data);
+
+      if (!response.data || response.data.length === 0) {
+        throw new Error("Aucune compétence trouvée.");
+      }
+
+      setCompetencyData(response.data);
+    } catch (error) {
+      console.error("❌ Erreur lors de la récupération des compétences:", error);
+      setCompetencyData([]); 
+    }
+  };
+
+  fetchCompetencies();
+}, [selectedCompetencies]);
 
 
 

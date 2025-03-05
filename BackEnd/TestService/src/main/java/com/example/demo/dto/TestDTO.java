@@ -53,7 +53,7 @@ public class TestDTO {
     }
 
     public List<CandidatDTO> getCandidats() {
-        return candidats;
+        return candidats != null ? candidats : List.of(); // Évite le NullPointerException
     }
 
     public void setCandidats(List<CandidatDTO> candidats) {

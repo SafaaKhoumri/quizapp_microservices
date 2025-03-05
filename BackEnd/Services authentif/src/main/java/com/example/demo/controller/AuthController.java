@@ -2,13 +2,15 @@ package com.example.demo.controller;
 
 import com.example.demo.entity.Administrateur;
 import com.example.demo.security.JwtService;
-import com.example.demo.service.UserService;
+import com.example.demo.dto.AdministrateurDTO;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import com.example.demo.service.*;
 
 import java.util.Map;
 
@@ -24,6 +26,8 @@ public class AuthController {
 
     @Autowired
     private JwtService jwtService;
+    @Autowired
+    private AdministrateurService administrateurService;
 
     @GetMapping("/test")
     public ResponseEntity<String> test() {
@@ -40,6 +44,27 @@ public class AuthController {
         } else {
             logger.warn("Login failed for user with email: {}", user.getEmail());
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Login failed.");
+        }
+    }
+    @GetMapping("/{id}")
+    public ResponseEntity<Administrateur> getAdministrateurById(@PathVariable Long id) {
+        Administrateur administrateur = administrateurService.getAdministrateurById(id); // Maintenant, il est bien
+                                                                                         // injecté
+        return ResponseEntity.ok(administrateur);
+    }
+
+    @GetMapping("/email/{email}")
+    public ResponseEntity<AdministrateurDTO> getAdministrateurByEmail(@PathVariable String email) {
+        System.out.println("📌 Requête reçue pour admin avec email: " + email);
+
+        AdministrateurDTO adminDTO = administrateurService.getAdministrateurByEmail(email);
+
+        if (adminDTO != null) {
+            System.out.println("📌 Admin trouvé : " + adminDTO);
+            return ResponseEntity.ok(adminDTO);
+        } else {
+            System.out.println("❌ Aucun administrateur trouvé pour cet email");
+            return ResponseEntity.notFound().build();
         }
     }
 }

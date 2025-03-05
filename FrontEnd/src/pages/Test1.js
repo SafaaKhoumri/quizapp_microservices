@@ -10,6 +10,7 @@ function Test1() {
   const { user } = useUser(); // Récupérer l'utilisateur connecté
   const [form, setForm] = useState({
     adminEmail: user?.email || '', // Utiliser l'email de l'utilisateur connecté
+    adminId: user?.id || '', // Utiliser l'email de l'utilisateur connecté
     theme: '',
     role: '',
     level: '',

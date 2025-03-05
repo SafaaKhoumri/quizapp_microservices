@@ -23,4 +23,5 @@ public class AdministrateurController {
                                                                                          // injecté
         return ResponseEntity.ok(administrateur);
     }
+
 }
