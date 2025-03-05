@@ -20,13 +20,7 @@ public class ScoreController {
 
     @PostMapping("/saveScore")
     public ResponseEntity<Score> saveScore(@RequestBody ScoreDTO scoreDTO) {
-        Score score = scoreService.saveScore(
-            scoreDTO.getTestId(),
-            scoreDTO.getCandidatId(),
-            scoreDTO.getCorrectAnswers(),
-            scoreDTO.getTotalQuestions()
-        );
-        
+        Score score = scoreService.saveScore(scoreDTO);
         return ResponseEntity.ok(score);
     }
     

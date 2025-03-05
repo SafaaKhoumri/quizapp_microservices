@@ -9,9 +9,11 @@ import org.springframework.stereotype.Service;
 
 import com.example.answer.api.CandidatClient;
 import com.example.answer.api.QuestionClient;
+import com.example.answer.api.ScoreClient;
 import com.example.answer.dto.AnswerDTO;
 import com.example.answer.dto.CandidatDTO;
 import com.example.answer.dto.QuestionDTO;
+import com.example.answer.dto.ScoreDTO;
 import com.example.answer.model.Answer;
 import com.example.answer.repositories.AnswerRepository;
 
@@ -26,6 +28,9 @@ public class AnswerService {
 
     @Autowired
     private CandidatClient candidatClient;
+
+    @Autowired
+    private ScoreClient scoreClient;
 
     // Convertir Answer en AnswerDTO avec détails du candidat et de la question
     public AnswerDTO toDTO(Answer answer) {
@@ -79,19 +84,28 @@ public class AnswerService {
     }
 
     public List<AnswerDTO> saveMultipleAnswers(List<AnswerDTO> answerDTOs, String candidatEmail) {
-        // Fetch candidatId using the email
-        System.out.println("🔍 Fetching candidat by email: " + candidatEmail);
         CandidatDTO candidat = candidatClient.getCandidatByEmail(candidatEmail);
         Long candidatId = candidat.getId();
     
-        // Attach candidatId to each answer
         List<Answer> answers = answerDTOs.stream()
             .map(dto -> new Answer(null, dto.getTexteReponse(), dto.isEstCorrecte(), candidatId, dto.getQuestionId()))
             .collect(Collectors.toList());
     
         List<Answer> savedAnswers = answerRepository.saveAll(answers);
+    
+        calculateAndSaveScore(candidatId, savedAnswers);
+    
         return savedAnswers.stream().map(this::toDTO).collect(Collectors.toList());
     }
     
-    
+    private void calculateAndSaveScore(Long candidatId, List<Answer> answers) {
+        int correctAnswers = (int) answers.stream().filter(Answer::isEstCorrecte).count();
+        int totalQuestions = answers.size();
+        
+        // Assuming questionId represents the testId
+        Long testId = answers.get(0).getQuestionId(); 
+
+        ScoreDTO scoreDTO = new ScoreDTO(candidatId, testId, correctAnswers, totalQuestions);
+        scoreClient.saveScore(scoreDTO);
+    }
 }

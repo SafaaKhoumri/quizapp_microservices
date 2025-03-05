@@ -35,12 +35,8 @@ public class ScoreService {
         return scoreRepository.findByTestIdAndCandidatId(testId, candidatId);
     }
 
-    public Score saveScore(Long testId, Long candidatId, int correctAnswers, int totalQuestions) {
-        if (testClient.getTestById(testId) != null && candidatClient.getCandidatById(candidatId) != null) {
-            Score score = new Score(candidatId, testId, correctAnswers, totalQuestions);
-            return scoreRepository.save(score);
-        }
-        throw new RuntimeException("Le Test ou le Candidat n'existe pas !");
+    public Score saveScore(ScoreDTO scoreDTO) {
+        return scoreRepository.save(new Score(scoreDTO.getCandidatId(), scoreDTO.getTestId(), scoreDTO.getCorrectAnswers(), scoreDTO.getTotalQuestions()));
     }
 
     public String getNomCandidatById(Long candidatId) {

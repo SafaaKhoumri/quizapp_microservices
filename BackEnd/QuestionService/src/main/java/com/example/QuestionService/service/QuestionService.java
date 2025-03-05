@@ -6,7 +6,6 @@ import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.example.QuestionService.client.CandidatClient;
 import com.example.QuestionService.client.CompetencyClient;
 import com.example.QuestionService.client.TestClient;
 import com.example.QuestionService.dto.CompetencyDTO;
