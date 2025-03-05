@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import com.example.demo.service.*;
+import com.example.demo.api.CandidatClient;
 import com.example.demo.dto.CandidatDTO;
 import com.example.demo.dto.QuestionDTO;
 import com.example.demo.dto.TestDTO;
@@ -16,6 +17,9 @@ public class TestController {
 
     @Autowired
     private TestService testService;
+
+    @Autowired
+    private CandidatClient candidatClient;
 
     @PostMapping("/addTest")
     public ResponseEntity<String> createTest(@RequestBody TestDTO testDTO) {
@@ -41,5 +45,12 @@ public class TestController {
     public ResponseEntity<List<CandidatDTO>> getTestCandidates(@PathVariable Long id) {
         return ResponseEntity.ok(testService.getTestCandidates(id));
     }
+
+    @GetMapping("/candidat/email/{email}/testId")
+    public ResponseEntity<Long> getTestIdByCandidatEmail(@PathVariable String email) {
+        CandidatDTO candidat = candidatClient.getCandidatByEmail(email);
+        return ResponseEntity.ok(testService.getTestIdByCandidatId(candidat.getId()));
+    }
+
 
 }

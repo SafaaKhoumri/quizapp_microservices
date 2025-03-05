@@ -150,4 +150,9 @@ public class TestService {
                 .map(candidatClient::getCandidateById)
                 .collect(Collectors.toList())).orElse(null);
     }
+
+    public Long getTestIdByCandidatId(Long candidatId) {
+        return testRepository.findTestIdByCandidatId(candidatId);
+    }
+    
 }

@@ -41,4 +41,10 @@ public class QuestionController {
         return questionService.getQuestionsAndAnswersByTestId(testId);
     }
 
+    @GetMapping("/byCandidat/email/{email}")
+    public List<QuestionDTO> getQuestionsByCandidatEmail(@PathVariable String email) {
+        return questionService.getQuestionsByCandidatEmail(email);
+    }
+
+
 }
