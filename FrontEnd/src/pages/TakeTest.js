@@ -120,13 +120,14 @@ const handleCloseDialog = (confirm) => {
         const email = new URLSearchParams(window.location.search).get('email');
         console.log("Email: ", email); // Log for debugging
 
-        fetch(`http://localhost:8087/tests/${id}/submit?email=${encodeURIComponent(email)}`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(answerRequests)
-        }).then(response => {
+        fetch(`http://localhost:8087/answer/addMultiple?email=${encodeURIComponent(email)}`, { // Send email in query param
+          method: "POST",
+          headers: {
+              "Content-Type": "application/json"
+          },
+          body: JSON.stringify(answerRequests)
+      })
+      .then(response => {
             if (response.ok) {
                 alert('Test submitted successfully!');
             } else {

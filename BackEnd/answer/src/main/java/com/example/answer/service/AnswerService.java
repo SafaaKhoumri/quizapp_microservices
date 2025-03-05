@@ -77,5 +77,21 @@ public class AnswerService {
     public void deleteAnswer(Long id) {
         answerRepository.deleteById(id);
     }
+
+    public List<AnswerDTO> saveMultipleAnswers(List<AnswerDTO> answerDTOs, String candidatEmail) {
+        // Fetch candidatId using the email
+        System.out.println("🔍 Fetching candidat by email: " + candidatEmail);
+        CandidatDTO candidat = candidatClient.getCandidatByEmail(candidatEmail);
+        Long candidatId = candidat.getId();
+    
+        // Attach candidatId to each answer
+        List<Answer> answers = answerDTOs.stream()
+            .map(dto -> new Answer(null, dto.getTexteReponse(), dto.isEstCorrecte(), candidatId, dto.getQuestionId()))
+            .collect(Collectors.toList());
+    
+        List<Answer> savedAnswers = answerRepository.saveAll(answers);
+        return savedAnswers.stream().map(this::toDTO).collect(Collectors.toList());
+    }
+    
     
 }
