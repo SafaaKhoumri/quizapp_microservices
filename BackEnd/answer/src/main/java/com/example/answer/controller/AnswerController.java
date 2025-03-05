@@ -44,8 +44,9 @@ public class AnswerController {
         @PostMapping("/addMultiple")
     public ResponseEntity<List<AnswerDTO>> addMultipleAnswers(
             @RequestBody List<AnswerDTO> answerDTOs,
-            @RequestParam String email) {  
-        List<AnswerDTO> savedAnswers = answerService.saveMultipleAnswers(answerDTOs, email);
+            @RequestParam String email,
+            @RequestParam Long testId) {  
+        List<AnswerDTO> savedAnswers = answerService.saveMultipleAnswers(answerDTOs, email, testId);
         return ResponseEntity.ok(savedAnswers);
     }
 

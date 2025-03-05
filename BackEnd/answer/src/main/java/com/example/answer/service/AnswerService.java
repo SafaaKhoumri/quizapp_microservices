@@ -83,7 +83,7 @@ public class AnswerService {
         answerRepository.deleteById(id);
     }
 
-    public List<AnswerDTO> saveMultipleAnswers(List<AnswerDTO> answerDTOs, String candidatEmail) {
+    public List<AnswerDTO> saveMultipleAnswers(List<AnswerDTO> answerDTOs, String candidatEmail, Long testId) {
         CandidatDTO candidat = candidatClient.getCandidatByEmail(candidatEmail);
         Long candidatId = candidat.getId();
     
@@ -93,17 +93,14 @@ public class AnswerService {
     
         List<Answer> savedAnswers = answerRepository.saveAll(answers);
     
-        calculateAndSaveScore(candidatId, savedAnswers);
+        calculateAndSaveScore(candidatId, savedAnswers, testId);
     
         return savedAnswers.stream().map(this::toDTO).collect(Collectors.toList());
     }
     
-    private void calculateAndSaveScore(Long candidatId, List<Answer> answers) {
+    private void calculateAndSaveScore(Long candidatId, List<Answer> answers, Long testId) {
         int correctAnswers = (int) answers.stream().filter(Answer::isEstCorrecte).count();
-        int totalQuestions = answers.size();
-        
-        // Assuming questionId represents the testId
-        Long testId = answers.get(0).getQuestionId(); 
+        int totalQuestions = answers.size();        
 
         ScoreDTO scoreDTO = new ScoreDTO(candidatId, testId, correctAnswers, totalQuestions);
         scoreClient.saveScore(scoreDTO);

@@ -4,6 +4,7 @@ import { Button, Box, Typography, Paper, FormControl, FormControlLabel, Radio, R
 import { grey, common } from '@mui/material/colors';
 import { styled } from '@mui/system';
 import TestIntroduction from './TestIntroduction';
+import { South } from '@mui/icons-material';
 
 const GradientBackground = styled('div')(({ theme }) => ({
   display: 'flex',
@@ -119,8 +120,8 @@ const handleCloseDialog = (confirm) => {
 
         const email = new URLSearchParams(window.location.search).get('email');
         console.log("Email: ", email); // Log for debugging
-
-        fetch(`http://localhost:8087/answer/addMultiple?email=${encodeURIComponent(email)}`, { // Send email in query param
+        console.log("test id: ", id); // Log for debugging
+        fetch(`http://localhost:8087/answer/addMultiple?email=${encodeURIComponent(email)}&testId=${id}`, {
           method: "POST",
           headers: {
               "Content-Type": "application/json"
