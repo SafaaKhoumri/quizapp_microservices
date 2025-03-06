@@ -142,7 +142,7 @@ const handleSendTestToCandidate = async () => {
   console.log("📤 Payload envoyé :", JSON.stringify(requestBody, null, 2));
 
   try {
-    const response = await axios.post("http://localhost:8087/api/email/sendTestLink", requestBody);
+    const response = await axios.post("http://localhost:8087/api/email/sendEmailaddcandidat", requestBody);
     console.log("✅ Réponse du serveur :", response.data);
 
     Swal.fire("Succès", "Le test a été envoyé avec succès!", "success");

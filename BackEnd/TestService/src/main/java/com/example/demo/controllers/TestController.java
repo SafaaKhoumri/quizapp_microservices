@@ -11,6 +11,8 @@ import com.example.demo.dto.CandidatDTO;
 import com.example.demo.dto.QuestionDTO;
 import com.example.demo.dto.TestDTO;
 
+import org.springframework.http.HttpStatus;
+
 @RestController
 @RequestMapping("/tests")
 public class TestController {
@@ -50,6 +52,17 @@ public class TestController {
     public ResponseEntity<Long> getTestIdByCandidatEmail(@PathVariable String email) {
         CandidatDTO candidat = candidatClient.getCandidatByEmail(email);
         return ResponseEntity.ok(testService.getTestIdByCandidatId(candidat.getId()));
+    }
+
+    @PostMapping("/{testId}/addCandidate/{candidateId}")
+    public ResponseEntity<String> addCandidateToTest(@PathVariable Long testId, @PathVariable Long candidateId) {
+        try {
+            testService.addCandidateToTest(testId, candidateId);
+            return ResponseEntity.ok("✅ Candidat ajouté au test avec succès !");
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("❌ Erreur lors de l'ajout du candidat au test : " + e.getMessage());
+        }
     }
 
 

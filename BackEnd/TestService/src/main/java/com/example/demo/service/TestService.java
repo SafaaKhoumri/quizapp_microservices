@@ -10,6 +10,7 @@ import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.example.demo.api.CandidatClient;
 import com.example.demo.api.CompetenceClient;
@@ -165,6 +166,25 @@ public class TestService {
 
     public Long getTestIdByCandidatId(Long candidatId) {
         return testRepository.findTestIdByCandidatId(candidatId);
+    }
+
+
+    @Transactional
+    public void addCandidateToTest(Long testId, Long candidateId) {
+        if (testId == null || candidateId == null) {
+            throw new IllegalArgumentException("L'ID du test et du candidat ne peuvent pas être nuls.");
+        }
+        Test test = testRepository.findById(testId)
+                .orElseThrow(() -> new RuntimeException("Test non trouvé avec ID : " + testId));
+
+        List<Long> candidateIds = test.getCandidateIds();
+        if (!candidateIds.contains(candidateId)) {
+            testRepository.addCandidateToTest(testId, candidateId);
+            candidateIds.add(candidateId);
+            test.setCandidateIds(candidateIds);
+        } else {
+            throw new RuntimeException("Le candidat est déjà associé à ce test.");
+        }
     }
     
 }
