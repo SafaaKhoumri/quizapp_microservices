@@ -4,13 +4,13 @@ import com.example.demo.repositories.TestRepository;
 
 import com.example.demo.api.AdministrateurClient;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import com.example.demo.api.CandidatClient;
 import com.example.demo.api.CompetenceClient;
@@ -169,7 +169,7 @@ public class TestService {
     }
 
 
-    @Transactional
+   /* @Transactional
     public void addCandidateToTest(Long testId, Long candidateId) {
         if (testId == null || candidateId == null) {
             throw new IllegalArgumentException("L'ID du test et du candidat ne peuvent pas être nuls.");
@@ -182,6 +182,30 @@ public class TestService {
             testRepository.addCandidateToTest(testId, candidateId);
             candidateIds.add(candidateId);
             test.setCandidateIds(candidateIds);
+        } else {
+            throw new RuntimeException("Le candidat est déjà associé à ce test.");
+        }
+    }*/
+
+    public void addCandidateToTest(Long testId, Long candidateId) {
+        if (testId == null || candidateId == null) {
+            throw new IllegalArgumentException("L'ID du test et du candidat ne peuvent pas être nuls.");
+        }
+
+        // 🔥 Vérifier si le test existe
+        Test test = testRepository.findById(testId)
+                .orElseThrow(() -> new RuntimeException("Test non trouvé avec ID : " + testId));
+
+        // 🔥 Récupérer la liste des candidats
+        List<Long> candidateIds = test.getCandidateIds();
+        if (candidateIds == null) {
+            candidateIds = new ArrayList<>();  // ✅ Initialisation si la liste est vide
+        }
+
+        if (!candidateIds.contains(candidateId)) {
+            candidateIds.add(candidateId);  // ✅ Ajout du candidat à la liste
+            test.setCandidateIds(candidateIds);  // ✅ Mise à jour de l'entité
+            testRepository.save(test);  // ✅ Hibernate met automatiquement à jour test_candidate_ids
         } else {
             throw new RuntimeException("Le candidat est déjà associé à ce test.");
         }

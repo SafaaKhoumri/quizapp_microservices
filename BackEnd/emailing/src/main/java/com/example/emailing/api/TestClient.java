@@ -12,7 +12,7 @@ public interface TestClient {
     @GetMapping("/tests/{id}")
     TestDTO getTestById(@PathVariable Long id);
 
-    @PostMapping("/api/tests/{testId}/addCandidate/{candidateId}")
+    @PostMapping("/tests/{testId}/addCandidate/{candidateId}")
     void addCandidateToTest(@PathVariable("testId") Long testId, @PathVariable("candidateId") Long candidateId);
     
 }

@@ -124,7 +124,7 @@ public class EmailService {
         sendEmail(createdCandidat.getEmail(), "Invitation au test", body);
     }*/
 
-   public void sendEmailaddcandidat(candidatDTO requestDTO) {
+ /*  public void sendEmailaddcandidat(candidatDTO requestDTO) {
     if (requestDTO == null) {
         throw new IllegalArgumentException("Le DTO du candidat ne peut pas être nul.");
     }
@@ -143,6 +143,47 @@ public class EmailService {
     }
 
     logger.info("✅ Candidat créé avec succès. ID : {}", createdCandidat.getId());
+
+    // 🔥 Envoi de l’email
+    String testLink = "http://localhost:3000/TakeTest/" + requestDTO.getTestId() + "?email="
+            + createdCandidat.getEmail();
+    String body = "Bonjour " + createdCandidat.getName() + ",\n\n" +
+            "Vous êtes invité à passer le test. Cliquez ici : " + testLink + "\n\nBonne chance !";
+
+    logger.info("📩 Envoi de l'email d'invitation au test...");
+    sendEmail(createdCandidat.getEmail(), "Invitation au test", body);
+}*/
+
+
+public void sendEmailaddcandidat(candidatDTO requestDTO) {
+    if (requestDTO == null) {
+        throw new IllegalArgumentException("Le DTO du candidat ne peut pas être nul.");
+    }
+    if (requestDTO.getEmail() == null || requestDTO.getEmail().isEmpty()) {
+        throw new IllegalArgumentException("L'email du candidat ne peut pas être vide.");
+    }
+    if (requestDTO.getTestId() == null) {
+        throw new IllegalArgumentException("L'ID du test ne peut pas être nul.");
+    }
+
+    logger.info("📝 Création du candidat dans le service CandidatService...");
+    candidatDTO createdCandidat = candidatClient.addCandidate(requestDTO);
+
+    if (createdCandidat == null || createdCandidat.getId() == null) {
+        throw new RuntimeException("Échec de la création du candidat.");
+    }
+
+    logger.info("✅ Candidat créé avec succès. ID : {}", createdCandidat.getId());
+
+    // 🔥 Ajout du candidat au test via TestService (test_candidate_ids)
+    try {
+        logger.info("📡 Enregistrement du candidat dans le test via le microservice Test...");
+        testClient.addCandidateToTest(requestDTO.getTestId(), createdCandidat.getId());
+        logger.info("✅ Candidat ajouté au test avec succès !");
+    } catch (Exception e) {
+        logger.error("❌ Erreur lors de l'ajout du candidat au test : {}", e.getMessage());
+        throw new RuntimeException("Impossible d'ajouter le candidat au test.");
+    }
 
     // 🔥 Envoi de l’email
     String testLink = "http://localhost:3000/TakeTest/" + requestDTO.getTestId() + "?email="
