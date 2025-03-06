@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { grey} from '@mui/material/colors';
 import CloseIcon from '@mui/icons-material/Close';
 import Navbar from '../components/Navbar';
 import Swal from 'sweetalert2';
-import { useNavigate } from 'react-router-dom';
+
 
 
 import {
@@ -19,6 +20,7 @@ import {
 import { useLocation } from 'react-router-dom';
 
 function Test3() {
+  const navigate = useNavigate();
   const location = useLocation();
   const { adminEmail, theme, role, level, selectedCompetencies } = location.state || {};
   const [candidates, setCandidates] = useState([{ name: '', email: '' }]);
@@ -176,6 +178,8 @@ useEffect(() => {
             text: response.data.message || 'Test créé et envoyé avec succès!',
             icon: 'success',
             confirmButtonText: 'OK'
+          }).then(() => {
+            navigate('/TestList');  // 🔥 Rediriger vers TestList après validation
         });
 
     } catch (error) {
@@ -183,10 +187,9 @@ useEffect(() => {
         setErrorMessage(error.response?.data?.message || "Échec de l'envoi des emails et de l'enregistrement du test.");
     } finally {
         setIsLoading(false);
-    }
-};
+   }
 
-
+  };
 const handleVisualizeTest = async () => {
   try {
       if (!selectedCompetencies || selectedCompetencies.length === 0) {

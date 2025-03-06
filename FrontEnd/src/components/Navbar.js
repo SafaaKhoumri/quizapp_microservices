@@ -24,10 +24,10 @@ const Navbar = () => {
       <Toolbar style={{ display: 'flex', justifyContent: 'space-between', width: '100%' }}>
         <img src={logo} alt="Logo" style={{ width: 100 }} />
         <nav style={{ alignItems: 'center' }}>
-          <Link to="/Login" style={linkStyle('/Login')}>Home</Link>
-          <Link to="/TestList" style={linkStyle('/TestList')}>Tests</Link>
-          <Link to="/TestResultsPage" style={linkStyle('/TestResultsPage')}>Résultats</Link>
-          <Link to="/More" style={linkStyle('/More')}>Plus</Link>
+        <Link to="#" style={linkStyle('/More')}>Bienvenue Dans Votre Espace</Link>
+        <Link to="/TestList" style={linkStyle('/TestList')}>Tests</Link>
+        <Link to="/TestResultsPage" style={linkStyle('/TestResultsPage')}>Résultats</Link>
+        <Link to="/Login" style={linkStyle('/Login')}>Déconnexion</Link>
         </nav>
         <Button
           variant="outlined"
