@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 
 import com.example.demo.dto.CandidatDTO;
 
-@FeignClient(name = "CandidatService", url = "http://localhost:8071")
+@FeignClient(name = "CandidatService")
 public interface CandidatClient {
 
     @GetMapping("/candidat/{id}")

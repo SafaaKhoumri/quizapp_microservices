@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 
 import com.example.demo.dto.AdministrateurDTO;
 
-@FeignClient(name = "Authentification", url = "http://localhost:8088")
+@FeignClient(name = "Authentification")
 public interface AdministrateurClient {
 
     @GetMapping("/api/administrators/{id}")

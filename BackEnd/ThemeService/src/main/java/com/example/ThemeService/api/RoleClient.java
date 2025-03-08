@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 
 import com.example.ThemeService.dto.RoleDTO;
 
-@FeignClient(name = "RoleService", url = "http://localhost:8082")
+@FeignClient(name = "RoleService")
 public interface RoleClient {
     @GetMapping("/role/{themeId}")
     RoleDTO getRoleByThemeId(@PathVariable Long themeId);

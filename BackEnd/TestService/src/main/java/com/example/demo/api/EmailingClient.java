@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 
 import com.example.demo.dto.CandidatDTO;
 
-@FeignClient(name = "emailing", url = "http://localhost:8080")
+@FeignClient(name = "emailing")
 public interface EmailingClient {
     
     @PostMapping("/api/email/sendTestLink")

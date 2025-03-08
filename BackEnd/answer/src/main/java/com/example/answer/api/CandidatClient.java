@@ -8,7 +8,7 @@ import com.example.answer.dto.CandidatDTO;
 
 
 
-@FeignClient(name = "CandidatService", url = "http://localhost:8071")
+@FeignClient(name = "CandidatService")
 public interface CandidatClient {
 
     @GetMapping("/candidat/{id}")

@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 
 import com.example.CompetenceService.dto.LevelDTO;
 
-@FeignClient(name = "LevelService", url = "http://localhost:8083")
+@FeignClient(name = "LevelService")
 public interface LevelClient {
     @GetMapping("/level/{id}")
     LevelDTO getLevelById(@PathVariable Long id);

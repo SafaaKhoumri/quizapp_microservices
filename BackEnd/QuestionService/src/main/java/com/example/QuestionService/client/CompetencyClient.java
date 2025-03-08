@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 
 import com.example.QuestionService.dto.CompetencyDTO;
 
-@FeignClient(name = "CompetencyService", url = "http://localhost:8089/competences")
+@FeignClient(name = "CompetenceService")
 public interface CompetencyClient {
     @GetMapping("/{id}")
     CompetencyDTO getCompetencyById(@PathVariable("id") Long id);

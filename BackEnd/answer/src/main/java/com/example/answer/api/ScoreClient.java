@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 
 import com.example.answer.dto.ScoreDTO;
 
-@FeignClient(name = "ScoreService", url = "http://localhost:8086") // Change URL if needed
+@FeignClient(name = "ScoreService")
 public interface ScoreClient {
     
     @PostMapping("/scores")

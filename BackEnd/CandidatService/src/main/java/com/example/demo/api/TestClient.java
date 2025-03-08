@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 
 import com.example.demo.dto.TestDTO;
 
-@FeignClient(name = "TestService", url = "http://localhost:8070")
+@FeignClient(name = "Test-service")
 public interface TestClient {
     @GetMapping("/tests/{id}")
     TestDTO getTestById(@PathVariable Long id);;
